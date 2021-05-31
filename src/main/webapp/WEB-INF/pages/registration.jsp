@@ -19,15 +19,27 @@
         <form:input path="login" id="check_login" title="Login" />
       </div>
 
-      <div">
+      <div>
+          <label title="FirstName">First Name</label>
+          <form:input path="firstName" id="check_firstName" title="FirstName" />
+      </div>
+      <div>
+          <label title="LastName">Last Name</label>
+          <form:input path="lastName" id="check_lastName" title="LastName" />
+      </div>
+
+      <div>
         <label title="Password">Password</label>
         <form:input path="password" id="check_password" type="password" title="Password" />
       </div>
 
       <div>
+          <label title="Email">Email</label>
+          <form:input path="email" id="check_email" type="email" title="Email" />
+      </div>
+      <div>
         <button>Confirm</button>
       </div>
     </form:form>
-
   </body>
 </html>

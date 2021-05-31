@@ -1,11 +1,17 @@
 package com.epam.rd.izh.repository;
 
-import com.epam.rd.izh.entity.AuthorizedUser;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.epam.rd.izh.dto.UserDTO;
+import com.epam.rd.izh.entity.AuthorizedUser;
+import com.epam.rd.izh.entity.UnknownUser;
+import com.epam.rd.izh.util.MappingUtilsForUserDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -20,8 +26,33 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepository {
-  private final List<AuthorizedUser> users = new ArrayList<>();
+  private final List<UserDTO> users = new ArrayList<>();
 
+  @Autowired
+  JdbcTemplate jdbcTemplate;
+
+  @Autowired
+  MappingUtilsForUserDTO mappingUtilsForUserDTO;
+
+  public UserRepository(MappingUtilsForUserDTO mappingUtilsForUserDTO) {
+    this.mappingUtilsForUserDTO = mappingUtilsForUserDTO;
+  }
+
+  public UserDTO getUserByLogin(String login) {
+    return users.stream().filter(userDTO -> userDTO.getLogin().contains(login)).findFirst().orElse(null);
+  }
+
+  public boolean createNewUser(@Nullable UnknownUser unknownUser) {
+    if (unknownUser != null) {
+      UserDTO userDTO = mappingUtilsForUserDTO.mapToUserDTO(unknownUser);
+      jdbcTemplate.update("insert into person (login, password, fname, lname, email, role) values(?, ?, ?, ?, ?, ?)",
+              userDTO.getLogin(), userDTO.getPassword(), userDTO.getFirstName(), userDTO.getLastName(),
+                      userDTO.getEmail(), userDTO.getRole());
+      return users.add(userDTO);
+    }
+
+    return false;
+  }
   /**
    * В данном методе использована библиотека Stream API:
    * .filter проверяет каждый элемент коллекции на удовлетворение условия .equals(login), в случае, если совпадающий
@@ -35,17 +66,18 @@ public class UserRepository {
 
   @Nullable
   public AuthorizedUser getAuthorizedUserByLogin(@Nonnull String login) {
-    return users.stream()
+    UserDTO userDTO = users.stream()
         .filter(value -> value.getLogin().equals(login))
         .findFirst().orElse(null);
+    return userDTO != null ? mappingUtilsForUserDTO.mapToAuthorizedUser(userDTO) : null;
   }
 
-  public boolean addAuthorizedUser(@Nullable AuthorizedUser user) {
-    if (user != null) {
-      users.add(user);
-      return true;
-    }
-    return false;
-  }
+//  public boolean addAuthorizedUser(@Nullable UnknownUser user) {
+//    if (user != null) {
+//      users.add(mappingUtilsForUserDTO.mapToUserDTO(user));
+//      return true;
+//    }
+//    return false;
+//  }
 
 }

@@ -1,9 +1,13 @@
 package com.epam.rd.izh.controller;
 
 import com.epam.rd.izh.entity.AuthorizedUser;
+import com.epam.rd.izh.entity.UnknownUser;
 import com.epam.rd.izh.repository.UserRepository;
 import javax.validation.Valid;
+
+import com.epam.rd.izh.service.UnknownUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,10 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AuthenticationController {
 
   @Autowired
-  UserRepository userRepository;
-
-  @Autowired
-  private PasswordEncoder passwordEncoder;
+  UnknownUserService unknownUserService;
 
   /**
    * Метод, отвечающий за логику авторизации пользователя.
@@ -61,7 +62,7 @@ public class AuthenticationController {
   @GetMapping("/registration")
   public String viewRegistration(Model model) {
     if(!model.containsAttribute("registrationForm")){
-      model.addAttribute("registrationForm", new AuthorizedUser());
+      model.addAttribute("registrationForm", new UnknownUser());
     }
     return "registration";
   }
@@ -70,7 +71,7 @@ public class AuthenticationController {
    * Метод, отвечающий за подтверждение регистрации пользователя и сохранение данных в репозиторий или DAO.
    */
   @PostMapping("/registration/proceed")
-  public String processRegistration(@Valid @ModelAttribute("registrationForm") AuthorizedUser registeredUser,
+  public String processRegistration(@Valid @ModelAttribute("registrationForm") UnknownUser unknownUser,
       BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
     /**
@@ -92,18 +93,18 @@ public class AuthenticationController {
      * registeredUser может быть DTO объектом, преобразуемым в AuthorizedUser сущность в сервисе-маппере
      * (эот сервис нужно написать самим), вместе с присвоением роли и шифрованием пароля.
      */
-    registeredUser.setRole("User");
-    registeredUser.setPassword(passwordEncoder.encode(registeredUser.getPassword()));
+
+    System.out.println(unknownUser.toString());
+    return (unknownUserService.addNewRegisteredUser(unknownUser)) ? "redirect:/login" : "registration";
 
     /**
      * Добавление пользователя в репозиторий или в базу данных через CRUD операции DAO.
      * Рекомендуется вынести эту логику на сервисный слой.
      */
-    userRepository.addAuthorizedUser(registeredUser);
+
     /**
      * В случае успешной регистрации редирект можно настроить на другой энд пойнт.
      */
-    return "redirect:/login";
   }
 
 }

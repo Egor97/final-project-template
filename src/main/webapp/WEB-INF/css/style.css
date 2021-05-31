@@ -1,0 +1,212 @@
+@import '../libs/bootstrap-4.4.1/dist/css/bootstrap-grid.min.css';
+
+body {
+	width: 100%;
+	height: 100vh;
+	margin: 0;
+
+    background-color: #1a1f25;
+    font-size: 15px;	
+    line-height: 1.6;
+}
+
+*,
+*:after,
+*:before {
+	box-sizing: border-box;
+}
+
+
+/* Header */
+
+.header {
+	position: relative;
+
+    width: 100%;
+    height: 10%;
+
+    margin: auto;
+	top: 0;
+	left: 0;
+	right: 0;
+
+    background-color: white;
+    z-index: 1000;
+}
+
+.container__header {
+	position: absolute;
+
+	top: 50%;
+	transform: translateY(-50%);
+
+	width: 100%;
+	
+	display: block;
+	align-self: center;
+}
+
+.header__inner {
+	display: flex;
+
+	justify-content: space-between;
+	align-items: center;
+}
+
+
+/*Logo*/
+
+.header__logo {
+	font-size: 30px;
+	font-weight: 700;
+	color: #587600;
+	font-family: 'Architects Daughter', cursive;
+	margin: 5px 15px 5px 45px;
+}
+
+/*Header nav*/
+
+.nav {
+	font-size: 14px;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+.nav__link {
+	display: inline-block;
+	margin-left: 20px;
+	margin-right: 45px;
+
+	color: rgb(73,98,0);
+	font-size: 16px;
+
+	padding: 5px 10px 5px 10px;
+	border: 1px solid white;
+	border-radius: 15px;
+}
+
+.nav__link:hover {
+	color: white;
+	background-color: #587600;
+	opacity: 0.8;
+
+	transition: background .1s linear;
+}
+
+
+/*Nav*/
+
+.navigation {
+	display: block;
+	background-color: #587600;
+
+	margin: auto;
+	height: 5%;
+}
+
+.navigation__wrapper {
+	display: block;
+	position: relative;
+
+	margin: auto;
+	width: 60%;
+	height: 100%;
+}
+
+.list__link {
+	position: absolute;
+
+	display: flex;
+
+	justify-content: space-between;	
+	margin: auto;
+
+	width: 100%;
+	height: 100%;
+	padding: 0;
+}
+
+.navigation__link {
+	display: flex;
+
+	align-items: center;
+	justify-content: center;
+
+	text-transform: uppercase;
+	color: white;
+
+	height: 100%;	
+	width: 100%;
+
+	font-weight: 500;
+	font-size: 16px;
+
+	padding: 0px 20px;
+
+	cursor: pointer;
+}
+
+.navigation__link:hover {
+	background: #78a100;
+
+	transition: background .2s linear;
+}
+
+/*Main section*/
+
+.main__section {
+	width: 100%;
+	height: 75%;
+}
+
+.outer_wrapper {
+	position: relative;
+
+	width: 80%;
+	height: 100%;
+
+	margin: auto;
+}
+
+.inner_wrapper {
+	position: absolute;
+
+	top: 50%;
+	transform: translateY(-50%);
+
+	width: 100%;
+}
+
+.col {
+	margin: 30px 10px;
+	border: 1px solid black;
+
+	color: white;
+
+	font-size: 20px;
+	text-transform: uppercase;	
+}
+
+
+/*section wrapper*/
+
+.wrapper {
+	display: block;
+
+	height: 80%;
+	margin: auto;
+}
+
+
+/*Footer*/
+
+.footer {
+	width: 100%;
+	height: 10%;
+	
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	background-color: white;
+}	

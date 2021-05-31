@@ -1,0 +1,165 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500);
+
+#man-people-user, #lock-locker, #emailer {
+	fill: white;
+}
+
+.wrapper {
+	font-family: 'Roboto', sans-serif;
+
+	position: relative;
+
+	width: 300px;
+}
+
+.wrapper__inner {
+	position: absolute;
+
+	top: 50%;
+	transform: translateY(-50%);
+	width: 100%;
+
+	padding: 10px;
+
+	border: 1px solid #587600;
+	border-radius: 15px;
+}
+
+form {
+  	position: relative;
+}
+
+/*SupForm Label*/
+
+.sign__up {
+	display: block;
+	margin: auto;
+	text-align: center;
+}
+
+h3.sign__up {
+  	color: white;
+  	font-size: 1.3em;
+  	font-weight: 500;
+  	margin: 10px auto 20px;
+}
+
+/*Form*/
+
+.user__fname {
+	position: absolute;
+	width: 30px;
+	height: 30px;
+	margin-top: 10px;
+	padding: 7px;
+	left: 5px;
+}
+.user__fname::after {
+	content: "";
+	width: 1px;
+	height: 30px;
+	position: absolute;
+	background: #22272d;
+	top: 0px;
+	left: 100%;
+}
+
+.user__lname {
+	position: absolute;
+	width: 30px;
+	height: 30px;
+	margin-top: 10px;
+	padding: 7px;
+	left: 5px;
+}
+.user__lname::after {
+	content: "";
+	width: 1px;
+	height: 30px;
+	position: absolute;
+	background: #22272d;
+	top: 0px;
+	left: 100%;
+}
+
+.lock {
+	position: absolute;
+	width: 30px;
+	height: 30px;
+	margin-top: 10px;
+	padding: 7px;
+	left: 5px;
+}
+.lock::after {
+	content: "";
+	width: 1px;
+	height: 30px;
+	position: absolute;
+	background: #22272d;
+	top: 0px;
+	left: 100%;
+}
+
+.email {
+	position: absolute;
+	width: 30px;
+	height: 30px;
+	margin-top: 10px;
+	padding: 7px;
+	left: 5px;
+}
+.email::after {
+	content: "";
+	width: 1px;
+	height: 30px;
+	position: absolute;
+	background: #22272d;
+	top: 0px;
+	left: 100%;
+} 
+
+input {
+	width: 100%;
+	padding: 5px;
+	height: 40px;
+	border-radius: 3px;
+	margin: 5px 0;
+	outline: none;
+}
+
+input[type="text"]:focus, 
+input[type="password"]:focus, 
+input[type="email"]:focus {
+	border: 1px solid #587600;
+	box-shadow: none;
+}
+
+input[type="text"] {
+	background: transparent;
+	border: 2px solid #22272d;
+	padding-left: 45px;
+	color: #587600;
+}
+
+input[type="password"] {
+	background: transparent;
+	border: 2px solid #22272d;
+	padding-left: 45px;
+	color: #587600;
+}
+
+input[type="email"] {
+	background: transparent;
+	border: 2px solid #22272d;
+	padding-left: 45px;
+	color: #587600; 
+}
+
+input[type="submit"] {
+	background: #587600;
+	border: none;
+	color: white;
+	text-align: center;
+	font-size: 1em;
+	cursor: pointer;
+}
