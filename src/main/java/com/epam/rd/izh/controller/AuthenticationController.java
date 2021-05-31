@@ -51,7 +51,7 @@ public class AuthenticationController {
      * В application.properties есть следующие строки:
      * spring.mvc.view.prefix=/WEB-INF/pages/
      * spring.mvc.view.suffix=.jsp
-     * Spring MVC, используя суффикс и префикс, создаст итоговый путь к JSP: /WEB-INF/pages/login.jsp
+     * Spring MVC, используя суффикс и префикс, создаст итоговый путь к JSP: /WEB-INF/pages/login.html
      */
     return "login";
   }

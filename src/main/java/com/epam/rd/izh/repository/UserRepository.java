@@ -1,8 +1,5 @@
 package com.epam.rd.izh.repository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -10,7 +7,7 @@ import com.epam.rd.izh.dto.UserDTO;
 import com.epam.rd.izh.entity.AuthorizedUser;
 import com.epam.rd.izh.entity.UnknownUser;
 import com.epam.rd.izh.util.MappingUtilsForUserDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.epam.rd.izh.util.PersonRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -26,29 +23,26 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepository {
-  private final List<UserDTO> users = new ArrayList<>();
 
-  @Autowired
   JdbcTemplate jdbcTemplate;
-
-  @Autowired
   MappingUtilsForUserDTO mappingUtilsForUserDTO;
+  PersonRowMapper personRowMapper;
 
-  public UserRepository(MappingUtilsForUserDTO mappingUtilsForUserDTO) {
+  public UserRepository(JdbcTemplate jdbcTemplate, MappingUtilsForUserDTO mappingUtilsForUserDTO,
+                        PersonRowMapper personRowMapper) {
+    this.jdbcTemplate = jdbcTemplate;
     this.mappingUtilsForUserDTO = mappingUtilsForUserDTO;
+    this.personRowMapper = personRowMapper;
   }
 
-  public UserDTO getUserByLogin(String login) {
-    return users.stream().filter(userDTO -> userDTO.getLogin().contains(login)).findFirst().orElse(null);
-  }
-
+  //  create UserDTO
   public boolean createNewUser(@Nullable UnknownUser unknownUser) {
     if (unknownUser != null) {
       UserDTO userDTO = mappingUtilsForUserDTO.mapToUserDTO(unknownUser);
       jdbcTemplate.update("insert into person (login, password, fname, lname, email, role) values(?, ?, ?, ?, ?, ?)",
               userDTO.getLogin(), userDTO.getPassword(), userDTO.getFirstName(), userDTO.getLastName(),
-                      userDTO.getEmail(), userDTO.getRole());
-      return users.add(userDTO);
+              userDTO.getEmail(), userDTO.getRole());
+      return true;
     }
 
     return false;
@@ -64,20 +58,15 @@ public class UserRepository {
    * в метод аргументами.
    */
 
+  //  get UserDTO
   @Nullable
   public AuthorizedUser getAuthorizedUserByLogin(@Nonnull String login) {
-    UserDTO userDTO = users.stream()
-        .filter(value -> value.getLogin().equals(login))
-        .findFirst().orElse(null);
-    return userDTO != null ? mappingUtilsForUserDTO.mapToAuthorizedUser(userDTO) : null;
-  }
+    UserDTO userDTO = jdbcTemplate.queryForObject(
+            "select * from person where login = ?",
+            new Object[]{login}, personRowMapper
+            );
 
-//  public boolean addAuthorizedUser(@Nullable UnknownUser user) {
-//    if (user != null) {
-//      users.add(mappingUtilsForUserDTO.mapToUserDTO(user));
-//      return true;
-//    }
-//    return false;
-//  }
+    return (userDTO != null) ? mappingUtilsForUserDTO.mapToAuthorizedUser(userDTO) : null;
+  }
 
 }

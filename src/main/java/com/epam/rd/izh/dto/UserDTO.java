@@ -9,6 +9,7 @@ public class UserDTO {
     @Autowired
     private final PasswordEncoder passwordEncoder;
 
+    private long id;
     private String login;
     private String password;
     private String role;
