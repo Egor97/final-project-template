@@ -1,19 +1,20 @@
 package com.epam.rd.izh.config;
 
 import com.epam.rd.izh.dto.UserDTO;
+import com.epam.rd.izh.repository.BookRepositoryImpl;
 import com.epam.rd.izh.repository.UserRepository;
+import com.epam.rd.izh.service.AuthorizedUserService;
 import com.epam.rd.izh.service.UnknownUserService;
 import com.epam.rd.izh.util.PersonRowMapper;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 
 @Configuration
 @PropertySource("classpath:application.properties")
@@ -22,7 +23,6 @@ public class WebConfig {
    * Данный класс можно использовать для создание бинов приложения, например бин ObjectMapper для десериализации.
    * Этот класс не является обязательным, но является стандартным там, где используется настройка бинов.
    */
-  PasswordEncoder passwordEncoder;
   UserRepository userRepository;
 
   @Value("${spring.database.driverClassName}")
@@ -31,6 +31,8 @@ public class WebConfig {
   private String url;
   @Value("${spring.datasource.username}")
   private String name;
+  @Value("${spring.datasource.password}")
+  private String pass;
 
   @Bean
   public UnknownUserService unknownUserService() {
@@ -38,9 +40,8 @@ public class WebConfig {
   }
 
   @Bean
-//  @Scope("prototype")
   public UserDTO userDTO() {
-    return new UserDTO(passwordEncoder);
+    return new UserDTO();
   }
 
   @Bean
@@ -50,16 +51,27 @@ public class WebConfig {
 
   @Bean
   public DataSource dataSource() {
-    DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-    dataSourceBuilder.driverClassName(className);
-    dataSourceBuilder.url(url);
-    dataSourceBuilder.username(name);
-    dataSourceBuilder.password("asgardThror223");
-    return dataSourceBuilder.build();
+    BasicDataSource dataSource = new BasicDataSource();
+    dataSource.setDriverClassName(className);
+    dataSource.setUrl(url);
+    dataSource.setUsername(name);
+    dataSource.setPassword(pass);
+    dataSource.setDefaultAutoCommit(false);
+    return dataSource;
   }
 
   @Bean
   public PersonRowMapper personRowMapper() {
     return new PersonRowMapper();
+  }
+
+  @Bean
+  public AuthorizedUserService authorizedUserService() {
+    return new AuthorizedUserService(userRepository);
+  }
+
+  @Bean
+  public BookRepositoryImpl bookRepository() {
+    return new BookRepositoryImpl(new ArrayList<>(), jdbcTemplate());
   }
 }

@@ -1,13 +1,9 @@
 package com.epam.rd.izh.dto;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Data
 public class UserDTO {
-    @Autowired
-    private final PasswordEncoder passwordEncoder;
 
     private long id;
     private String login;
@@ -17,20 +13,26 @@ public class UserDTO {
     private String lastName;
     private String email;
 
-    public UserDTO(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public void setPassword(String password) {
-        this.password = passwordEncoder.encode(password);
+        this.password = password;
     }
 
-    public void setRole(String role) {
+    public void setRole() {
+        String role;
         if (login.contains("admIn")) {
             role = "Admin";
         } else {
             role = "User";
         }
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

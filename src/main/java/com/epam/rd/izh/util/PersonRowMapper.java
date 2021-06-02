@@ -22,7 +22,7 @@ public class PersonRowMapper implements RowMapper<UserDTO> {
         userDTO.setFirstName(resultSet.getString("fname"));
         userDTO.setLastName(resultSet.getString("lname"));
         userDTO.setEmail(resultSet.getString("email"));
-        userDTO.setRole(resultSet.getString("role"));
+        userDTO.setRole();
 
         return userDTO;
     }

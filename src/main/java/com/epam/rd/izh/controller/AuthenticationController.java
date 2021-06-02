@@ -2,13 +2,11 @@ package com.epam.rd.izh.controller;
 
 import com.epam.rd.izh.entity.AuthorizedUser;
 import com.epam.rd.izh.entity.UnknownUser;
-import com.epam.rd.izh.repository.UserRepository;
 import javax.validation.Valid;
 
+import com.epam.rd.izh.service.AuthorizedUserService;
 import com.epam.rd.izh.service.UnknownUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.stream.Collectors;
 
 /**
  * В аргументы контроллеров, которые обрабатывают запросы, можно указать дополнительные входные параметры: Например:
@@ -29,6 +29,8 @@ public class AuthenticationController {
 
   @Autowired
   UnknownUserService unknownUserService;
+  @Autowired
+  AuthorizedUserService authorizedUserService;
 
   /**
    * Метод, отвечающий за логику авторизации пользователя.
@@ -36,6 +38,7 @@ public class AuthenticationController {
    */
   @GetMapping("/login")
   public String login(Model model, @RequestParam(required = false) String error) {
+
     if (error != null) {
       /**
        * Model представляет из себя Map коллекцию ключ-значения, распознаваемую View элементами MVC.
@@ -81,9 +84,7 @@ public class AuthenticationController {
     //registeredUser.validate(registeredUserDto, bindingResult);
 
     if (bindingResult.hasErrors()) {
-      //логика отображения ошибки, не является обязательной
-      //...
-      //...
+
       return "redirect:/registration";
     }
     /**
@@ -94,7 +95,6 @@ public class AuthenticationController {
      * (эот сервис нужно написать самим), вместе с присвоением роли и шифрованием пароля.
      */
 
-    System.out.println(unknownUser.toString());
     return (unknownUserService.addNewRegisteredUser(unknownUser)) ? "redirect:/login" : "registration";
 
     /**

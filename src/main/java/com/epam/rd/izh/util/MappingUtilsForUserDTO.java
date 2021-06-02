@@ -12,13 +12,17 @@ public class MappingUtilsForUserDTO {
     @Autowired
     UserDTO userDTO;
 
+    public MappingUtilsForUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
+    }
+
     public UserDTO mapToUserDTO(UnknownUser unknownUser) {
         userDTO.setLogin(unknownUser.getLogin());
         userDTO.setFirstName(unknownUser.getFirstName());
         userDTO.setLastName(unknownUser.getLastName());
         userDTO.setPassword(unknownUser.getPassword());
         userDTO.setEmail(unknownUser.getEmail());
-        userDTO.setRole(unknownUser.getRole());
+        userDTO.setRole();
         return userDTO;
     }
 

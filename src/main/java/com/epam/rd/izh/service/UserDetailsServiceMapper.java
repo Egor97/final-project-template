@@ -1,9 +1,10 @@
 package com.epam.rd.izh.service;
 
 import com.epam.rd.izh.entity.AuthorizedUser;
-import com.epam.rd.izh.repository.UserRepository;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,7 +23,8 @@ import org.springframework.stereotype.Service;
 public class UserDetailsServiceMapper implements UserDetailsService {
 
   @Autowired
-  UserRepository userRepository;
+  AuthorizedUserService authorizedUserService;
+  private static final Logger logger = Logger.getLogger("UserDetailsServiceMapper.class");
 
   /**
    * Данный метод должен вернуть объект User, являющийся пользователем текущей сессии.
@@ -36,8 +38,13 @@ public class UserDetailsServiceMapper implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-
-    AuthorizedUser authorizedUserDto = userRepository.getAuthorizedUserByLogin(login);
+    logger.info("entering loadUserByUserName");
+    AuthorizedUser authorizedUserDto = authorizedUserService.getAuthorizedUser(login);
+    logger.info("get User from DB: " + authorizedUserDto);
+    if (authorizedUserDto == null) {
+      logger.info("user with login " + login);
+      throw new UsernameNotFoundException("Not found!");
+    }
     Set<GrantedAuthority> roles = new HashSet<>();
     roles.add(new SimpleGrantedAuthority(authorizedUserDto.getRole()));
 

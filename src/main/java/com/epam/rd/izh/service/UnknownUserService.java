@@ -10,13 +10,17 @@ import org.springframework.stereotype.Service;
 public class UnknownUserService {
 
     @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UnknownUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     public boolean addNewRegisteredUser(UnknownUser unknownUser) {
-        return userRepository.createNewUser(unknownUser);
+        if (userRepository.createNewUser(unknownUser)) {
+            this.userRepository.commit();
+            return true;
+        }
+        return false;
     }
 }
